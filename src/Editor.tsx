@@ -1,33 +1,39 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { db } from "./firebase";
+import { database } from "./firebase";
 
-// FIXME
-const dbRef = "posts/1";
+// TODO
+const postId = 1;
 
 export function Editor() {
   const [loading, setLoading] = useState(true);
-  const [value, setValue] = useState("");
+  const [body, setBody] = useState("");
+
+  const db = database.ref(`posts/${postId}`);
 
   useEffect(() => {
-    db.ref(dbRef)
-      .once("value")
-      .then(snapshot => {
-        setValue(snapshot.val().body);
-        setLoading(false);
-      });
+    db.once("value").then(snapshot => {
+      const data = snapshot.val();
+      data ? setBody(data.body) : data.set({ body: body });
+    });
+
+    db.on("value", snapshot => {
+      setBody(snapshot.val().body);
+    });
+
+    setLoading(false);
   }, []);
 
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setValue(event.target.value);
-      db.ref(dbRef).set({ body: value });
+      setBody(event.target.value);
+      db.update({ body: body });
     },
-    [value]
+    [body]
   );
 
   return (
     <textarea
-      value={value}
+      value={body}
       onChange={onChange}
       style={{ width: "100%", height: "80%" }}
       disabled={loading}

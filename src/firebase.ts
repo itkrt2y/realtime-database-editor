@@ -11,4 +11,4 @@ firebase.initializeApp({
 });
 
 import "firebase/database";
-export const db = firebase.database();
+export const database = firebase.database();
