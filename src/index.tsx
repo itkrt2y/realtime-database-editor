@@ -1,30 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
-
-const Editor = () => {
-  const [value, setValue] = useState("");
-
-  const onChange = useCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setValue(event.target.value);
-    },
-    [value]
-  );
-
-  return (
-    <textarea
-      value={value}
-      onChange={onChange}
-      style={{ width: "100%", height: "80%" }}
-    ></textarea>
-  );
-};
-
-const App = () => (
-  <>
-    <h1>Editor</h1>
-    <Editor />
-  </>
-);
+import { App } from "./App";
 
 ReactDOM.render(<App />, document.querySelector("#app")!);
